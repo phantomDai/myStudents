@@ -1,0 +1,91 @@
+/*
+ * @author: GuYouda
+ * @date: 2018/4/26
+ * @time: 9:21
+ * @des:
+ */
+
+package test.concurrence.mxt;
+
+/**
+ * java中的sleep()和wait()的区别
+ * @author Hongten
+ * @date 2013-12-10
+ */
+public class MXT_sleep {
+
+    public static void main(String[] args) throws InterruptedException {
+        test();
+    }
+
+    private static void test() throws InterruptedException {
+        new Thread(new Thread1()).start();
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Thread t = new Thread(new Thread2());
+        t.start();
+
+        Thread3 t3 = new Thread3();
+        Thread3.sleep(1000,200);
+        t3.sleep(1000);
+    }
+
+    private static class Thread1 implements Runnable{
+        @Override
+        public void run(){
+            synchronized (MXT_sleep.class) {
+                System.out.println("enter thread1...");
+                System.out.println("thread1 is waiting...");
+                try {
+                    //调用wait()方法，线程会放弃对象锁，进入等待此对象的等待锁定池
+                    MXT_sleep.class.wait();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("thread1 is going on ....");
+                System.out.println("thread1 is over!!!");
+            }
+        }
+    }
+
+    private static class Thread2 implements Runnable{
+        @Override
+        public void run(){
+            synchronized (MXT_sleep.class) {
+                System.out.println("enter thread2....");
+                System.out.println("thread2 is sleep....");
+                //只有针对此对象调用notify()方法后本线程才进入对象锁定池准备获取对象锁进入运行状态。
+                MXT_sleep.class.notify();
+                //==================
+                //区别
+                //如果我们把代码：TestD.class.notify();给注释掉，即TestD.class调用了wait()方法，但是没有调用notify()
+                //方法，则线程永远处于挂起状态。
+                try {
+                    //sleep()方法导致了程序暂停执行指定的时间，让出cpu该其他线程，
+                    //但是他的监控状态依然保持者，当指定的时间到了又会自动恢复运行状态。
+                    //在调用sleep()方法的过程中，线程不会释放对象锁。
+                    Thread.sleep(5000,200);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("thread2 is going on....");
+                System.out.println("thread2 is over!!!");
+            }
+        }
+    }
+
+    private static class Thread3 extends Thread{
+        @Override
+        public void run() {
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("");
+        }
+    }
+}

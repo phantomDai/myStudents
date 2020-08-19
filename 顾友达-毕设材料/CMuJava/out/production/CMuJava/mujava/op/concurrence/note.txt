@@ -1,0 +1,44 @@
+updated: 2018-05-03
+问题：
+     SAN:
+        针对getAndSet方法作为其他方法参数是会有语法错误
+        目前考虑到的可能情况：for,while,方法参数
+        可能是OpenJava的问题，无法遍历到所有的MethodCall，部分判断无法继续
+        目前只能取到while判断表达式含有getAndSet方法调用的。
+
+ 进度：
+     Modify Parameters of Concurrent Methods：
+        MXT: 完成 针对sleep在部分特殊情况下存在问题
+        MSP: 完成
+        ESP: 完成
+        MSF: 完成
+        MXC: 完成
+        MBR: 完成
+
+    Modify the Occurrence of Concurrency Method Calls
+        RTXC: 完成
+        RCXC: 完成
+        RNA: 完成
+        RJS: 完成
+        ELPA: 完成
+        SAN: 完成  针对getAndSet方法作为其他方法参数是会有语法错误
+
+    Modify Keyword
+        ASTK: 完成
+        RSTK: 完成
+        ASK: 完成
+        RSK: 完成
+        RSB: 完成
+        RVK: 完成
+        RFU: 完成
+
+    Switch Concurrent Objects
+        RXO: 完成
+        EELO: 完成
+
+    Modify Concurrent Region
+        注：暂时只考虑synchronized代码块，下一步需要加入Lock
+        SHCR: 完成
+        SKCR: 完成
+        EXCR: 完成
+        SPCR: 完成

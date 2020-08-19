@@ -1,0 +1,64 @@
+/*
+ * @author: GuYouda
+ * @date: 2018/4/19
+ * @time: 10:46
+ * @des:
+ */
+
+package test.concurrence.rsb;
+
+/**
+ * 银行账户类
+ */
+class Account {
+    String name;
+    float amount;
+
+    public Account(String name, float amount) {
+        this.name = name;
+        this.amount = amount;
+    }
+
+    //存钱
+    public void deposit(float amt) {
+        amount += amt;
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //取钱
+    public void withdraw(float amt) {
+        amount -= amt;
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public float getBalance() {
+        return amount;
+    }
+}
+
+/**
+ * 账户操作类
+ */
+public class RSB2 implements Runnable {
+    private final Account account;
+
+    public RSB2(Account account) {
+        this.account = account;
+    }
+
+    public void run() {
+        synchronized (account) {
+            account.deposit(500);
+            account.withdraw(500);
+            System.out.println(Thread.currentThread().getName() + ":" + account.getBalance());
+        }
+    }
+}
